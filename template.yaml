@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Demo app
+
+  A lambda function with two trigger events
+
+Globals:
+  Function:
+    Timeout: 10
+    CodeUri: src/
+    Runtime: python3.8
+    Architectures:
+      - x86_64
+
+Resources:
+  InvokeFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.lambda_handler
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /activity
+            Method: get
+        CloudwatchEvent:
+          Type: Schedule
+          Properties:
+            Schedule: cron(0/5 * * * ? *)
+            # Schedule: 'rate(5 minutes)'
+            Name: TestSchedule
+
+Outputs:
+  ApiEvent:
+    Description: "API Gateway endpoint URL for Prod stage for Invoke function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/activity/"
+
