@@ -30,6 +30,8 @@ Resources:
             Schedule: cron(0/5 * * * ? *)
             # Schedule: 'rate(5 minutes)'
             Name: TestSchedule
+            Input: '{"message": "Saying Hello from CloudWatch Log"}'
+            Enabled: true
 
 Outputs:
   ApiEvent:
